@@ -6,7 +6,7 @@ package object numbers {
 
   val naturals: Stream[Long] = naturalsFrom(1L)
 
-  val fibonacci: Stream[Long] = 1L #:: 2L #:: fibonacci.zip(fibonacci.tail).map { case (l, r) => l + r }
+  val fibonacci: Stream[BigInt] = BigInt(1) #:: BigInt(2) #:: fibonacci.zip(fibonacci.tail).map { case (l, r) => l + r }
 
   def collatz(n: Long): Stream[Long] = n #:: collatz(if (n % 2 == 0) n / 2 else 3 * n + 1)
 
