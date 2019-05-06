@@ -1,6 +1,6 @@
 package ru.odbc.problems.p9
 
-import commons.operations.{sqrt, gcd}
+import commons.operations.sqrt
 
 object Solution extends App {
 

@@ -10,4 +10,9 @@ package object numbers {
 
   def collatz(n: Long): Stream[Long] = n #:: collatz(if (n % 2 == 0) n / 2 else 3 * n + 1)
 
+  def isSquare(n: Long): Boolean = {
+    val s = operations.sqrt(n)
+    s * s == n
+  }
+
 }

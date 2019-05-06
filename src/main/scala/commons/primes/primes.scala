@@ -15,6 +15,6 @@ package object primes {
     1L :: List.range(1, pf.size + 1).flatMap(pf.combinations(_).map(_.product)).distinct
   }
 
-  private def isPrime(n: Long): Boolean = primes.takeWhile(j => j * j <= n).forall(n % _ > 0)
+  def isPrime(n: Long): Boolean = primes.takeWhile(j => j * j <= n).forall(n % _ > 0)
 
 }
