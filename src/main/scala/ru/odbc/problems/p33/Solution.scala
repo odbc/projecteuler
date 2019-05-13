@@ -2,10 +2,10 @@ package ru.odbc.problems.p33
 
 import commons.operations.gcd
 
-final case class Fraction(num: Long, denom: Long)
+final case class Fraction(num: BigInt, denom: BigInt)
 
 object Fraction {
-  def apply(num: Long, denom: Long): Fraction =
+  def apply(num: BigInt, denom: BigInt): Fraction =
     if (denom == 0) new Fraction(1, 0)
     else {
       val g = gcd(num, denom)

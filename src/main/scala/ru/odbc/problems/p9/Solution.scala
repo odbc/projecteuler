@@ -4,7 +4,7 @@ import commons.operations.sqrt
 
 object Solution extends App {
 
-  final case class Pythagoreans(a: Long, b: Long, c: Long)
+  final case class Pythagoreans(a: BigInt, b: BigInt, c: BigInt)
 
   val limit = sqrt(1000L)
 

@@ -4,11 +4,11 @@ import commons.operations.{sqrt, gcd}
 
 object Solution extends App {
 
-  final case class Pythagoreans(a: Long, b: Long, c: Long) {
-    def perimeter: Long = a + b + c
+  final case class Pythagoreans(a: BigInt, b: BigInt, c: BigInt) {
+    def perimeter: BigInt = a + b + c
   }
 
-  val ms = 1L to sqrt(1000L)
+  val ms = BigInt(1) to sqrt(1000)
 
   val mns = for {
     m <- ms

@@ -4,7 +4,7 @@ import commons.operations.gcd
 
 object Solution extends App {
 
-  val numbers = (1L to 20L).toList
+  val numbers = (BigInt(1) to BigInt(20)).toList
 
   val result = numbers.tail.foldLeft(numbers.head)((a, b) => a * b / gcd(a, b))
 
