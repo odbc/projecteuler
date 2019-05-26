@@ -5,106 +5,132 @@ import scala.io.Source
 
 object Solution extends App {
 
-  type Board = Array[Array[Set[Int]]]
-
-  def isBoardsEqual: (Board, Board) => Boolean =
-    (left, right) =>
-      (for {
-        i <- left.indices
-        j <- left.indices
-      } yield (i, j)).forall { case (i, j) => left(i)(j) == right(i)(j) }
-
-  def isBoardSolved: Board => Boolean = board => board.forall(_.forall(_.size == 1))
-
-  def transpose: Board => Board =
-    board => (for { i <- board.indices } yield board.map { row => row(i) }).toArray
-
-  def squaresToRows: Board => Board = board =>
-    (for {
-      i <- board.indices by 3
-      j <- board.indices by 3
-    } yield board(i).slice(j, j + 3) ++ board(i + 1).slice(j, j + 3) ++ board(i + 2).slice(j, j + 3)).toArray
-
-  def rowsToSquares: Board => Board = board =>
-    board.sliding(3, 3).flatMap { threeRows =>
-      Array(
-        threeRows(0).slice(0, 3) ++ threeRows(1).slice(0, 3) ++ threeRows(2).slice(0, 3),
-        threeRows(0).slice(3, 6) ++ threeRows(1).slice(3, 6) ++ threeRows(2).slice(3, 6),
-        threeRows(0).slice(6, 9) ++ threeRows(1).slice(6, 9) ++ threeRows(2).slice(6, 9),
-      )
-    }.toArray
-
-  def updateRows: Board => Board = board => {
-    val lll = board.map { row =>
-      val solved = row.filter(_.size == 1).map(_.head).toSet
-      val updated = row.map { cell => if (cell.size == 1) cell else cell diff solved }
-
-      (1 to 9).foldLeft(updated) { case (r, n) =>
-        if (r.count(_.contains(n)) == 1) r.map { s => if (s.contains(n)) Set(n) else s }
-        else r
-      }
-    }
-    if (lll(0)(5) == Set(4)) lll.foreach(row => println(row.mkString(" ")))
-    lll
-  }
-
-  def updateBoard: Board => Board = board =>
-    (updateRows andThen
-      transpose andThen updateRows andThen transpose andThen
-      squaresToRows andThen updateRows andThen rowsToSquares)(board)
-
-  def solve: Board => Board = board =>
-    whileLoop[(Board, Board)] { case (pred, curr) =>
-      !isBoardsEqual(pred, curr) && !isBoardSolved(curr)
-    } { case (_, curr) =>
-      //println(curr.map(_.toVector.map(_.toList)).toVector)
-      //curr.foreach(r => println(r.map(s => if (s.size == 1) s.head else 0).mkString(" ")))
-      (curr, updateBoard(curr))
-    } { (Array.fill(9, 9)(Set(0)), board) }._2
-
   @tailrec
   def whileLoop[T](cond: T => Boolean)(f: T => T)(value: T): T =
     if (cond(value)) whileLoop(cond)(f)(f(value)) else value
 
-  val boards = Source.fromResource("p096_sudoku.txt").getLines
-    .sliding(10, 10)
-    .map(l => l.tail.map(s => s.map(c => { val n = c.asDigit; if (n == 0) (1 to 9).toSet else Set(n) }).toArray).toArray)
-    .toList
+  case class Row(cells: Array[Set[Int]]) {
+    def isRegular: Boolean = cells.forall(_.size == 1) && cells.map(_.head).toSet == (1 to 9).toSet
 
-  val result = List(boards(9)).map { board =>
-    whileLoop[List[Board]] { _.forall(!isBoardSolved(_)) } { l =>
-      val attemption = l.map(solve)
-      attemption.foreach(_.foreach(row => println(row.mkString(" "))))
-      if (attemption.exists(isBoardSolved)) attemption
-      else attemption.flatMap { b =>
-        val pi = (for {
-          i <- b.indices
-          j <- b.indices
-          if b(i)(j).size == 2
-        } yield (i, j)).head
-
-        val pair = b(pi._1)(pi._2).toList
-        println(pair)
-
-        val lll = List(
-          b.zipWithIndex.map { case (r, ri) =>
-            if (ri == pi._1) r.zipWithIndex.map { case (s, ci) => if (ci == pi._2) Set(pair.head) else s } else r
-          },
-          b.zipWithIndex.map { case (r, ri) =>
-            if (ri == pi._1) r.zipWithIndex.map { case (s, ci) => if (ci == pi._2) Set(pair.last) else s } else r
-          }
-        )
-        println(lll.foreach(ppp => if (ppp(0)(5) == Set(4)) ppp.foreach(row => println(row.mkString(" ")))))
-        lll
-      }
-    } { board :: Nil }.find(isBoardSolved).get.map(_.map(_.head))
+    override def toString: String =
+      cells.map(cell => " " * (9 - cell.size) + cell.mkString(" ") + " " * (9 - cell.size) + " | ").mkString
   }
 
-  result.foreach(b => { b.foreach(row => println(row.mkString(" "))); println(b.head.slice(0, 3).mkString) })
+  case class Board(rows: Array[Row]) {
+    def ==(other: Board): Boolean =
+      this.rows.zip(other.rows).forall { case (lr, rr) =>
+        lr.cells.zip(rr.cells).forall { case (l, r) => l == r }
+      }
 
-  result.find { b =>
-    b.exists( row => row.toSet != (1 to 9).toSet )
-  }.get.foreach(row => println(row.mkString(" ")))
+    def !=(other: Board): Boolean = ! (this == other)
 
-  println(result.map(_.head.slice(0, 3).mkString.toInt).sum)
+    def transpose: Board = Board {
+      (for {
+        i <- this.rows.indices
+      } yield Row(this.rows.map { row => row.cells(i) })).toArray
+    }
+
+    def squaresToRows: Board = Board {
+      (for {
+        i <- this.rows.indices by 3
+        j <- this.rows.indices by 3
+      } yield Row {
+        this.rows(i).cells.slice(j, j + 3) ++
+          this.rows(i + 1).cells.slice(j, j + 3) ++
+          this.rows(i + 2).cells.slice(j, j + 3)
+      }).toArray
+    }
+
+    def rowsToSquares: Board = Board {
+      this.rows.sliding(3, 3).flatMap { threeRows =>
+        Array(
+          Row(threeRows(0).cells.slice(0, 3) ++ threeRows(1).cells.slice(0, 3) ++ threeRows(2).cells.slice(0, 3)),
+          Row(threeRows(0).cells.slice(3, 6) ++ threeRows(1).cells.slice(3, 6) ++ threeRows(2).cells.slice(3, 6)),
+          Row(threeRows(0).cells.slice(6, 9) ++ threeRows(1).cells.slice(6, 9) ++ threeRows(2).cells.slice(6, 9)),
+        )
+      }.toArray
+    }
+
+    override def toString: String = rows.map(row => row.toString + "\n").mkString
+
+    def isSolved: Boolean =
+      this.rows.forall(_.isRegular) &&
+        this.transpose.rows.forall(_.isRegular) &&
+        this.squaresToRows.rows.forall(_.isRegular)
+  }
+
+  val boards = Source.fromResource("p096_sudoku.txt").getLines
+    .sliding(10, 10)
+    .map { grid =>
+      Board {
+        grid.tail.map { row =>
+          Row {
+            row.map { char =>
+              val n = char.asDigit
+              if (n == 0) (1 to 9).toSet else Set(n)
+            }.toArray
+          }
+        }.toArray
+      }
+    }.toList
+
+  def simplifyRows: Board => Board = board => Board {
+    board.rows.map { row =>
+      val guessed = row.cells.filter(_.size == 1).map(_.head).toSet
+      val updated = Row { row.cells.map { cell => if (cell.size == 1) cell else cell diff guessed } }
+
+      Row {
+        (1 to 9).foldLeft(updated.cells) { case (r, n) =>
+          if (r.count(_.contains(n)) == 1) r.map { s => if (s.contains(n)) Set(n) else s }
+          else r
+        }
+      }
+    }
+  }
+
+  def simplifyBoard: Board => Board = board => {
+    def simplifyTransposed: Board => Board = b => simplifyRows(b.transpose).transpose
+    def simplifySquared: Board => Board = b => simplifyRows(b.squaresToRows).rowsToSquares
+    (simplifyRows andThen simplifyTransposed andThen simplifySquared)(board)
+  }
+
+  def solve: Board => Board = board =>
+    whileLoop[(Board, Board)]{ case (pred, curr) => pred != curr && !curr.isSolved } { case (_, curr) =>
+      (curr, simplifyBoard(curr))
+    } {
+      (Board((1 to 9).map(_ => Row(Array.fill(9)(Set(0)))).toArray), board)
+    }._2
+
+  val result = boards.zipWithIndex.map { case (board, indexxx) =>
+    println(indexxx)
+    whileLoop[List[Board]] { _.forall(!_.isSolved) } { l =>
+      val attemption = l.map(solve)
+      if (attemption.exists(_.isSolved)) attemption
+      else attemption.flatMap { b =>
+        println(b)
+        val (row, cell) = (for {
+          s <- 2 to 9
+          i <- b.rows.indices
+          j <- b.rows.indices
+          if b.rows(i).cells(j).size == s
+        } yield (i, j)).head
+
+        val minSet = b.rows(row).cells(cell).toVector
+
+        minSet.map { n =>
+          Board {
+            b.rows.zipWithIndex.map { case (r, ri) =>
+              Row {
+                if (ri == row) r.cells.zipWithIndex.map { case (s, ci) => if (ci == cell) Set(n) else s }
+                else r.cells
+              }
+            }
+          }
+        }
+      }
+    } { board :: Nil }.find(_.isSolved).get
+  }
+
+  result.foreach(println)
+  println(result.map(_.rows.head.cells.slice(0, 3).map(_.head).mkString.toInt).sum)
 }
