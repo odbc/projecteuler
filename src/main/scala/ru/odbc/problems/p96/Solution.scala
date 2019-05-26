@@ -57,6 +57,9 @@ object Solution extends App {
       this.rows.forall(_.isRegular) &&
         this.transpose.rows.forall(_.isRegular) &&
         this.squaresToRows.rows.forall(_.isRegular)
+
+    def isNotSolvable: Boolean =
+      this.rows.forall(_.cells.exists(_.isEmpty))
   }
 
   val boards = Source.fromResource("p096_sudoku.txt").getLines
@@ -79,12 +82,16 @@ object Solution extends App {
       val guessed = row.cells.filter(_.size == 1).map(_.head).toSet
       val updated = Row { row.cells.map { cell => if (cell.size == 1) cell else cell diff guessed } }
 
-      Row {
+      val newRow = Row {
         (1 to 9).foldLeft(updated.cells) { case (r, n) =>
           if (r.count(_.contains(n)) == 1) r.map { s => if (s.contains(n)) Set(n) else s }
           else r
         }
       }
+
+      val newGuessed = row.cells.filter(_.size == 1).map(_.head)
+      if (newGuessed.distinct.length != newGuessed.length) Row(Array.fill(9)(Set[Int]()))
+      else newRow
     }
   }
 
@@ -95,19 +102,19 @@ object Solution extends App {
   }
 
   def solve: Board => Board = board =>
-    whileLoop[(Board, Board)]{ case (pred, curr) => pred != curr && !curr.isSolved } { case (_, curr) =>
+    whileLoop[(Board, Board)]{ case (pred, curr) =>
+      pred != curr && !curr.isSolved && !curr.isNotSolvable
+    } { case (_, curr) =>
       (curr, simplifyBoard(curr))
     } {
       (Board((1 to 9).map(_ => Row(Array.fill(9)(Set(0)))).toArray), board)
     }._2
 
-  val result = boards.zipWithIndex.map { case (board, indexxx) =>
-    println(indexxx)
+  val result = boards.map { board =>
     whileLoop[List[Board]] { _.forall(!_.isSolved) } { l =>
       val attemption = l.map(solve)
       if (attemption.exists(_.isSolved)) attemption
       else attemption.flatMap { b =>
-        println(b)
         val (row, cell) = (for {
           s <- 2 to 9
           i <- b.rows.indices
@@ -131,6 +138,5 @@ object Solution extends App {
     } { board :: Nil }.find(_.isSolved).get
   }
 
-  result.foreach(println)
   println(result.map(_.rows.head.cells.slice(0, 3).map(_.head).mkString.toInt).sum)
 }
