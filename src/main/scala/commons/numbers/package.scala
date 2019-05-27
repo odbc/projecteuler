@@ -1,5 +1,7 @@
 package commons
 
+import commons.operations.gcd
+
 package object numbers {
 
   def naturalsFrom(n: BigInt): Stream[BigInt] = n #:: naturalsFrom(n + 1)
@@ -15,4 +17,40 @@ package object numbers {
     s * s == n
   }
 
+  case class Ratio(num: BigInt, den: BigInt) {
+    def +(other: Ratio) = Ratio(this.num * other.den + this.den * other.num, this.den * other.den)
+    def -(other: Ratio) = Ratio(this.num * other.den - this.den * other.num, this.den * other.den)
+    def *(other: Ratio) = Ratio(this.num * other.num, this.den * other.den)
+    def /(other: Ratio) = Ratio(this.num * other.den, this.den * other.num)
+
+    def ==(other: Ratio): Boolean = this.num * other.den == this.den * other.num
+    def >(other: Ratio): Boolean  = this.num * other.den > this.den * other.num
+    def <(other: Ratio): Boolean  = ! (this > other)
+  }
+
+  object Ratio {
+    def apply(num: BigInt, den: BigInt): Ratio = {
+      val g = gcd(num, den).toInt
+      val n = num / g
+      val d = den / g
+      if (d >= 0) new Ratio(n, d)
+      else new Ratio(-n, -d)
+    }
+
+    implicit def ratioNumeric: Numeric[Ratio] = new Numeric[Ratio] {
+      override def plus(x: Ratio, y: Ratio): Ratio = x + y
+      override def minus(x: Ratio, y: Ratio): Ratio = x - y
+      override def times(x: Ratio, y: Ratio): Ratio = x * y
+      override def negate(x: Ratio): Ratio = x * Ratio(-1, 1)
+      override def fromInt(x: Int): Ratio = Ratio(x, 1)
+      override def toInt(x: Ratio): Int = (x.num / x.den).toInt
+      override def toLong(x: Ratio): Long = (x.num / x.den).toLong
+      override def toFloat(x: Ratio): Float = x.num.toFloat / x.den.toFloat
+      override def toDouble(x: Ratio): Double = x.num.toDouble / x.den.toDouble
+      override def compare(x: Ratio, y: Ratio): Int =
+        if (x == y) 0
+        else if (x > y) 1
+        else -1
+    }
+  }
 }

@@ -1,6 +1,7 @@
 package ru.odbc.problems.p94
 
 import commons.numbers.isSquare
+import commons.equations.generalizedPell
 
 object Solution extends App {
 
@@ -26,44 +27,19 @@ object Solution extends App {
     * Equation x^2 - 3 * y^2 = 4
     */
 
-  val A = 3
-  val B = 4
-
-  case class Pair(x: BigInt, y: BigInt) {
-    def *(other: Pair) = Pair(this.x * other.x + A * this.y * other.y, this.x * other.y + this.y * other.x)
-
-    def toNumber: Double = x.toDouble + y.toDouble * Math.sqrt(A)
-  }
-
-  val eps = Pair(2, 1)
-
-  val leftY  = 0
-  val rightY = Math.floor(Math.sqrt(B) * (eps.toNumber - Math.pow(eps.toNumber, -1)) / (2 * Math.sqrt(A))).toInt
-
-  val basis = for {
-    y <- leftY to rightY
-    c = A * y + B
-    if isSquare(c)
-    x = Math.sqrt(c).toInt
-  } yield Pair(x, y)
-
-  def solutions(basisPair: Pair): Stream[Pair] = basisPair #:: solutions(basisPair * eps)
-
-  val result = basis.flatMap { b =>
-    solutions(b).takeWhile(_.x + 2 < 1000000000).map { case Pair(x, y) =>
-      if ((x - 1) % 3 == 0) {
-        val a = (x - 1) / 3
-        val sq4times = (a - 1) * y
-        val perimeter = x - 2
-        (sq4times, perimeter)
-      } else {
-        val a = (x + 1) / 3
-        val sq4times = (a + 1) * y
-        val perimeter = x + 2
-        (sq4times, perimeter)
-      }
-    }.filter(p => p._1 > 0 && p._1 % 4 == 0).toList
-  }
+  val result = generalizedPell(3, 4).takeWhile(_._1 + 2 < 1000000000).map { case (x, y) =>
+    if ((x - 1) % 3 == 0) {
+      val a = (x - 1) / 3
+      val sq4times = (a - 1) * y
+      val perimeter = x - 2
+      (sq4times, perimeter)
+    } else {
+      val a = (x + 1) / 3
+      val sq4times = (a + 1) * y
+      val perimeter = x + 2
+      (sq4times, perimeter)
+    }
+  }.filter(p => p._1 > 0 && p._1 % 4 == 0).toList
 
   println(result.map(_._2).sum)
 }
