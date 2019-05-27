@@ -26,11 +26,15 @@ package object numbers {
     def ==(other: Ratio): Boolean = this.num * other.den == this.den * other.num
     def >(other: Ratio): Boolean  = this.num * other.den > this.den * other.num
     def <(other: Ratio): Boolean  = ! (this > other)
+
+    override def toString: String =
+      if (this.den == 1) this.num.toString
+      else this.num.toString + "/" + this.den.toString
   }
 
   object Ratio {
     def apply(num: BigInt, den: BigInt): Ratio = {
-      val g = gcd(num, den).toInt
+      val g = gcd(num, den)
       val n = num / g
       val d = den / g
       if (d >= 0) new Ratio(n, d)
