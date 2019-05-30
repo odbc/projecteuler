@@ -1,13 +1,9 @@
 package ru.odbc.problems.p96
 
-import scala.annotation.tailrec
 import scala.io.Source
+import commons.algorithms.whileLoop
 
 object Solution extends App {
-
-  @tailrec
-  def whileLoop[T](cond: T => Boolean)(f: T => T)(value: T): T =
-    if (cond(value)) whileLoop(cond)(f)(f(value)) else value
 
   case class Row(cells: Array[Set[Int]]) {
     def isRegular: Boolean = cells.forall(_.size == 1) && cells.map(_.head).toSet == (1 to 9).toSet
