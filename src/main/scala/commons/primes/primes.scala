@@ -2,6 +2,8 @@ package commons
 
 import numbers.naturalsFrom
 
+import scala.annotation.tailrec
+
 package object primes {
 
   val primes: Stream[BigInt] = 2L #:: naturalsFrom(3).filter(isPrime)
@@ -19,4 +21,16 @@ package object primes {
     if (n < 2) false
     else primes.takeWhile(j => j * j <= n).forall(n % _ > 0)
 
+  def canonicalRepresentation(n: BigInt): Map[BigInt, BigInt] = {
+    @tailrec
+    def go(num: BigInt, acc: Map[BigInt, BigInt]): Map[BigInt, BigInt] = {
+      if (num == 1) acc
+      else {
+        val prime = primes.find(num % _ == 0).get
+        go(num / prime, acc.updated(prime, BigInt(1) + acc.getOrElse(prime, 0)))
+      }
+    }
+
+    go(n, Map.empty)
+  }
 }
