@@ -21,8 +21,7 @@ object Solution extends App {
     a <- Stream.from(1).takeWhile(_ < limA)
     if gcd(a, c) == 1
     b = c - a
-    if gcd(a, b) == 1 && gcd(b, c) == 1
-    if rads.getOrElse(a, BigInt(1)) * rads.getOrElse(b, BigInt(1)) * radC < c
+    if gcd(a, b) == 1 && rads.getOrElse(a, BigInt(1)) * rads.getOrElse(b, BigInt(1)) * radC < c
   } yield c).sum
 
   val ps = primes.takeWhile(_ <= partLimit).toVector
@@ -49,8 +48,8 @@ object Solution extends App {
     if gcd(a, b) == 1
     c = a + b
     radC = rads.getOrElse(c, BigInt(1))
-    if c < limit && c / radC <= partLimit && gcd(a, c) == 1 && gcd(b, c) == 1
-    if rads.getOrElse(a, BigInt(1)) * rads.getOrElse(b, BigInt(1)) * radC < c
+    if c < limit && c / radC <= partLimit && gcd(a, c) == 1 &&
+       rads.getOrElse(a, BigInt(1)) * rads.getOrElse(b, BigInt(1)) * radC < c
   } yield c).sum
 
   val result = hSum + lSum
