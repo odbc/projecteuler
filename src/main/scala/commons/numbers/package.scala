@@ -27,6 +27,10 @@ package object numbers {
     def >(other: Ratio): Boolean  = this.num * other.den > this.den * other.num
     def <(other: Ratio): Boolean  = ! (this > other)
 
+    def floor: Ratio =
+      if (num >= 0) Ratio(num / den, 1)
+      else Ratio(num / den - 1, 1)
+
     override def toString: String =
       if (this.den == 1) this.num.toString
       else this.num.toString + "/" + this.den.toString
@@ -56,5 +60,18 @@ package object numbers {
         else if (x > y) 1
         else -1
     }
+  }
+
+  def contFraction(f: Ratio): Stream[BigInt] = {
+    def coeffs(a: Ratio, x: Ratio): Stream[(Ratio, Ratio)] = {
+      if (x.num == 0) (a, x) #:: Stream.empty[(Ratio, Ratio)]
+      else {
+        val revX = Ratio(x.den, x.num)
+        val nextA = revX.floor
+        (a, x) #:: coeffs(revX.floor, revX - nextA)
+      }
+    }
+
+    coeffs(f.floor, f - f.floor).map(_._1.num)
   }
 }
