@@ -1,6 +1,5 @@
 package ru.odbc.problems.p94
 
-import commons.numbers.isSquare
 import commons.equations.generalizedPell
 
 object Solution extends App {

@@ -1,6 +1,7 @@
 package commons
 
 import commons.numbers.isSquare
+import commons.operations.sqrt
 import commons.operations.gcd
 
 package object equations {
@@ -59,17 +60,24 @@ package object equations {
         def toNumber: Double = x.toDouble + y.toDouble * Math.sqrt(d.toDouble)
       }
 
-      val eps = Pair(2, 1)
+      case object Pair {
+        def apply(a: (BigInt, BigInt)): Pair = new Pair(a._1, a._2)
+      }
 
-      val leftY  = 0
-      val rightY = Math.floor(Math.sqrt(b.toDouble) * (eps.toNumber - Math.pow(eps.toNumber, -1)) / (2 * Math.sqrt(d.toDouble))).toInt
+      val eps = Pair(pell(d).head)
+
+      val leftY  =
+        if (b >= 0) 0
+        else Math.ceil(Math.sqrt(-b.toDouble) / Math.sqrt(d.toDouble)).toInt
+      val rightY =
+        if (b >= 0) Math.floor(Math.sqrt(b.toDouble) * (eps.toNumber - Math.pow(eps.toNumber, -1)) / (2 * Math.sqrt(d.toDouble))).toInt
+        else Math.floor(Math.sqrt(-b.toDouble) * (eps.toNumber + Math.pow(eps.toNumber, -1)) / (2 * Math.sqrt(d.toDouble))).toInt
 
       val basis = for {
-        y <- leftY to rightY
-        c = d * y + b
+        y <- leftY until rightY
+        c = d * y * y + b
         if isSquare(c)
-        x = Math.sqrt(c.toDouble).toInt
-      } yield Pair(x, y)
+      } yield Pair(sqrt(c), y)
 
       def solutions(basisPair: Pair): Stream[Pair] = basisPair #:: solutions(basisPair * eps)
 
