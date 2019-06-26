@@ -8,10 +8,7 @@ object Solution extends App {
     .getLines.toList.head
     .split(",").map(s => s.substring(1, s.length - 1)).toList.sorted
 
-  val result = names.zipWithIndex map { case (n, i) =>
-    (i + 1) * n.map(_.toInt - 64).sum
-  }
+  val result = names.zipWithIndex.map { case (n, i) => (i + 1) * n.map(_.toInt - 64).sum }.sum
 
-  println(result.sum)
-
+  println(result)
 }

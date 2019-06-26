@@ -6,8 +6,7 @@ object Solution extends App {
     val pStr = p.toString
     val pBin = p.toBinaryString
     pStr == pStr.reverse && pBin == pBin.reverse
-  }
+  }.sum
 
-  println(result.sum)
-
+  println(result)
 }

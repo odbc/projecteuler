@@ -2,7 +2,7 @@ package ru.odbc.problems.p1to50.p38
 
 object Solution extends App {
 
-  val perms = (1 to 9).permutations./*slice(35377, 35378).*/map(_.mkString).filter { perm =>
+  val result = (1 to 9).permutations.map(_.mkString).filter { perm =>
     val prefixes = List.iterate(perm.init, perm.length - 1)(_.init)
     val ps = prefixes map { prefix =>
       val ms = (1 to 9).map(_ * prefix.toInt).map(_.toString)
@@ -22,8 +22,7 @@ object Solution extends App {
     } filter { s => s.isDefined && s.get == perm }
 
     ps.nonEmpty
-  }
+  }.map(BigInt(_)).max
 
-  println(perms.toList)
-
+  println(result)
 }

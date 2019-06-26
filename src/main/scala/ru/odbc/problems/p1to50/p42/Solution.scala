@@ -13,5 +13,4 @@ object Solution extends App {
   val result = words.map(w => w.map(_.toInt - 64).sum).count(n => Naturals.isSquare(8 * n + 1))
 
   println(result)
-
 }

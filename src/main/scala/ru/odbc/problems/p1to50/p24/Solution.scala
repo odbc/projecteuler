@@ -13,8 +13,7 @@ object Solution extends App {
     p7 <- (0 to 9).filter(n => n != p0 && n != p1 && n != p2 && n != p3 && n != p4 && n != p5 && n != p6).toStream
     p8 <- (0 to 9).filter(n => n != p0 && n != p1 && n != p2 && n != p3 && n != p4 && n != p5 && n != p6 && n != p7).toStream
     p9 <- (0 to 9).filter(n => n != p0 && n != p1 && n != p2 && n != p3 && n != p4 && n != p5 && n != p6 && n != p7 && n != p8).toStream
-  } yield Vector(p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)).drop(999999)
+  } yield Vector(p0, p1, p2, p3, p4, p5, p6, p7, p8, p9)).drop(999999).head.mkString
 
-  println(result.head.mkString)
-
+  println(result)
 }

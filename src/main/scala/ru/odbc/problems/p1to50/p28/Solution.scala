@@ -12,8 +12,7 @@ object Solution extends App {
       val base = n * n + n + 1
       val diff = n + 1
       List.iterate(base, 4)(_ + diff)
-    } sum
+    }.sum + 1
 
-  println(result + 1)
-
+  println(result)
 }

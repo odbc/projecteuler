@@ -4,7 +4,7 @@ object Solution extends App {
 
   def unitFraction(num: Int, denom: Int): Stream[Int] = (num * 10 % denom) #:: unitFraction(num * 10 % denom, denom)
 
-  val result = (2 until 1000) map { d =>
+  val (result, _) = (2 until 1000).map { d =>
     val fraction = unitFraction(1, d)
 
     /** Floyd's cycle-finding algorithm
@@ -24,8 +24,7 @@ object Solution extends App {
     val cycle = startOnμ.head :: startOnμ.tail.takeWhile(_ != startOnμ.head).toList
 
     (d, cycle.size)
-  } maxBy(_._2)
+  }.maxBy(_._2)
 
-  println(result._1)
-
+  println(result)
 }

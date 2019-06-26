@@ -4,10 +4,9 @@ import lib.mathematics.numberTheory.numbers.Fibonacci
 
 object Solution extends App {
 
-  val overThousandDigits = Fibonacci().sequence.zipWithIndex filter { case (n, _) => n > BigInt(10).pow(999) }
+  val (_, result) = Fibonacci(0).sequence.zipWithIndex
+    .find { case (n, _) => n.toString.length == 1000 }
+    .get
 
-  val result = overThousandDigits.head
-
-  println(result._2 + 2)
-
+  println(result)
 }

@@ -1,18 +1,14 @@
 package ru.odbc.problems.p1to50.p44
 
-import lib.mathematics.numberTheory.numbers.Naturals
+import lib.mathematics.numberTheory.numbers.figurates.Pentagonals
 
 object Solution extends App {
 
-  def isPentagonal(n: Long): Boolean = Naturals.isSquare(24 * n + 1) && (1 + Naturals.sqrt(24 * n + 1)) % 6 == 0
+  val (_, result) = Pentagonals.sequence.zipWithIndex
+    .flatMap { case (p, i) => Pentagonals.sequence.take(i).map((p, _)) }
+    .map { case (a, b) => (a + b, a - b) }
+    .filter { case (s, d) => Pentagonals(s).isPentagonal && Pentagonals(d).isPentagonal }
+    .head
 
-  def pentagonals: Stream[Int] = Stream.from(1).map(n => n * (3 * n - 1) / 2)
-
-  val result = pentagonals.zipWithIndex
-    .flatMap { case (p, i) => pentagonals.take(i).map((p, _)) }
-    .map { case (a, b) => (a, b, a + b, a - b) }
-    .filter { case (_, _, s, d) => isPentagonal(s) && isPentagonal(d) }
-
-  println(result.take(1).toList.head._4)
-
+  println(result)
 }

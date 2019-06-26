@@ -18,6 +18,7 @@ object Solution extends App {
     )
   }
 
-  println(firstOfMonths(MonthInfo(2, 1, 1901)).takeWhile(_.year < 2001).filter(_.first == 0).toList.size)
+  val result = firstOfMonths(MonthInfo(2, 1, 1901)).takeWhile(_.year < 2001).filter(_.first == 0).toList.size
 
+  println(result)
 }

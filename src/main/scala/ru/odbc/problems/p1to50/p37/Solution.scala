@@ -13,8 +13,7 @@ object Solution extends App {
     (List.iterate(pStr, pStr.length)(s => s.tail) ++ List.iterate(pStr.init, pStr.length - 1)(s => s.init))
       .distinct
       .forall(pr => primeList.contains(pr.toInt))
-  }
+  }.drop(4).sum
 
-  println(result.drop(4).sum)
-
+  println(result)
 }

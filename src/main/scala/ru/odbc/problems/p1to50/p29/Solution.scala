@@ -8,5 +8,4 @@ object Solution extends App {
   } yield BigInt(a).pow(b)).toSet.size
 
   println(result)
-
 }

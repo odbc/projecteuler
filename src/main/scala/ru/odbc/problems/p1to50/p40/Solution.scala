@@ -14,6 +14,7 @@ object Solution extends App {
   val d100000 = sequence.find(_._2 == 100000)
   val d1000000 = sequence.find(_._2 == 1000000)
 
-  println(d1.get._1 * d10.get._1 * d100.get._1 * d1000.get._1 * d10000.get._1 * d100000.get._1 * d1000000.get._1)
+  val result = d1.get._1 * d10.get._1 * d100.get._1 * d1000.get._1 * d10000.get._1 * d100000.get._1 * d1000000.get._1
 
+  println(result)
 }

@@ -13,5 +13,7 @@ object Solution extends App {
     y <- abundants if x + y <= limit
   } yield x + y).toSet
 
-  println((1 to limit toSet).diff(abundantsSums).sum)
+  val result = (1 to limit).toSet.diff(abundantsSums).sum
+
+  println(result)
 }
