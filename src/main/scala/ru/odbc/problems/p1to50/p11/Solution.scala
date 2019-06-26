@@ -31,5 +31,4 @@ object Solution extends App {
   val foursMax = lists.flatMap(_.sliding(4).map(_.product)).max
 
   println(foursMax)
-
 }

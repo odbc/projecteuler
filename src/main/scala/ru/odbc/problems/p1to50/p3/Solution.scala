@@ -4,10 +4,7 @@ import lib.mathematics.numberTheory.arithmetic.Factors
 
 object Solution extends App {
 
-  val number = 600851475143L
+  val result = Factors(600851475143L).primes.max
 
-  val numberFactors = Factors(number).primes
-
-  println(numberFactors.max)
-
+  println(result)
 }

@@ -4,7 +4,7 @@ import lib.mathematics.numberTheory.numbers.Collatz
 
 object Solution extends App {
 
-  val result = (1L to 1000000L).map(n => (n, Collatz(n).sequence.takeWhile(_ > 1).size)).maxBy(_._2)
+  val result = (1L to 1000000L).map(n => (n, Collatz(n).sequence.takeWhile(_ > 1).size)).maxBy(_._2)._1
 
-  println(result._1)
+  println(result)
 }

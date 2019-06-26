@@ -15,6 +15,7 @@ object Solution extends App {
       else routes(x - 1, y) + routes(x, y - 1)
     )
 
-  println(routes(20, 20))
+  val result = routes(20, 20)
 
+  println(result)
 }

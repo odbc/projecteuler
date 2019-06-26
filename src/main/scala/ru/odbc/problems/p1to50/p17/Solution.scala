@@ -9,8 +9,9 @@ object Solution extends App {
   val hundreds = digits.map(_ + "hundred")
   val thousand = "onethousand"
 
-  val result = (belowHundred ++ hundreds ++ hundreds.flatMap(h => belowHundred.map(h + "and" + _)) ++ thousand).mkString
+  val result = (belowHundred ++ hundreds ++ hundreds.flatMap(h => belowHundred.map(h + "and" + _)) ++ thousand)
+    .mkString
+    .length
 
-  println(result.length)
-
+  println(result)
 }

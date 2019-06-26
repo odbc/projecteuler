@@ -15,3 +15,10 @@ case class Factors(n: BigInt) {
 
   def canonical: Map[BigInt, BigInt] = primes.groupBy(identity).mapValues(_.size)
 }
+
+object Factors {
+  def apply(canonical: Map[BigInt, BigInt]): Factors = {
+    val n = canonical.foldLeft(BigInt(1)) { case (prod, (p, exp)) => prod * p.pow(exp.toInt) }
+    Factors(n)
+  }
+}

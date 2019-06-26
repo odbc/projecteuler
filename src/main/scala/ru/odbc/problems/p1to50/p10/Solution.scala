@@ -7,5 +7,4 @@ object Solution extends App {
   val result = Primes.sequence.takeWhile(_ < 2000000L).sum
 
   println(result)
-
 }

@@ -8,6 +8,7 @@ object Solution extends App {
   val result = Naturals().sequence
     .map(n => n * (n + 1) / 2)
     .dropWhile(Factors(_).all.size < 500)
+    .head
 
-  println(result.head)
+  println(result)
 }

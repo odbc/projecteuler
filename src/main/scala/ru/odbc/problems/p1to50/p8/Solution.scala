@@ -7,5 +7,4 @@ object Solution extends App {
   val result = number.sliding(13).map(_.map(_.asDigit.toLong).product).max
 
   println(result)
-
 }

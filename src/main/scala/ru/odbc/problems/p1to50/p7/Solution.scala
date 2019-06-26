@@ -4,7 +4,7 @@ import lib.mathematics.numberTheory.numbers.Primes
 
 object Solution extends App {
 
-  val result = Primes.sequence.take(10001).last
+  val result = Primes.sequence.drop(10000).head
 
   println(result)
 }
