@@ -17,12 +17,13 @@ object Solution extends App {
   val ur = dl.zipWithIndex.map { case (n, i) => n - 2 * i - 2 }
   val ul = ur.zipWithIndex.map { case (n, i) => n - 2 * i - 2 }
 
-  val result = zipStreams(ul, ur, dl, dr).zipWithIndex.take(20000).foldLeft((0, 1, Int.MinValue)) {
+  val (_, _, r) = zipStreams(ul, ur, dl, dr).zipWithIndex.take(20000).foldLeft((0, 1, Int.MinValue)) {
     case ((ps, xs, ti), (l, i)) =>
       val primes = ps + l.count(n => Primes(n.toLong).isPrime)
       (primes, xs + 4, if (ti == Int.MinValue && primes.toDouble / (xs + 4) < 0.1) i else ti)
   }
 
-  println(2 * result._3 + 3 )
+  val result = 2 * r + 3
 
+  println(result)
 }

@@ -4,13 +4,14 @@ import lib.mathematics.numberTheory.arithmetic.Factors
 
 object Solution extends App {
 
-  def isPermutated(l: String, r: String): Boolean =
-    if (l.length != r.length) false
-    else l.sorted.zip(r.sorted).forall { case (lc, rc) => lc == rc }
+  def isPermutated(l: String, r: String): Boolean = l.sorted == r.sorted
 
   def phi(n: BigInt): BigInt = Factors(n).primes.distinct.foldLeft(n)((acc, p) => acc / p * (p - 1) )
 
-  val result = (2 to 10000000).map(n => (n, phi(n))).filter { case (n, ph) => isPermutated(n.toString, ph.toString) }
+  val (result, _) = (2 to 10000000)
+    .map(n => (n, phi(n)))
+    .filter { case (n, ph) => isPermutated(n.toString, ph.toString) }
+    .minBy { case (n, ph) => n.toDouble / ph.toLong }
 
-  println(result.minBy { case (n, ph) => n.toDouble / ph.toLong }._1)
+  println(result)
 }

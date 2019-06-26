@@ -19,11 +19,8 @@ object Solution extends App {
     encrypted = codes.zip(cycle(a, b, c).take(20).toList).map { case (code, key) => code ^ key }
   } yield (a, b, c, encrypted.map(_.toChar).mkString)
 
-  attempts.filter(_._4.count(c => !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == ' ')) == 0).foreach(println)
-
   val keys = List('e', 'x', 'p')
-  val result = codes.zip(cycle(keys: _*).take(codes.size)).map { case (code, key) => code ^ key }
+  val result = codes.zip(cycle(keys: _*).take(codes.length)).map { case (code, key) => code ^ key }.sum
 
-  println(result.sum)
-
+  println(result)
 }

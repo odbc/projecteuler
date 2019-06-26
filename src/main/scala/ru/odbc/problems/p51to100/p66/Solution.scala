@@ -10,7 +10,7 @@ object Solution extends App {
       sq * sq != d
     }
     .map { d => (d, Pell(d, 1).solutions.head) }
+    .maxBy(_._2._1)._1
 
-  println(result.maxBy(_._2._1)._1)
-
+  println(result)
 }

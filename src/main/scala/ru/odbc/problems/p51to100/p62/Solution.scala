@@ -2,9 +2,7 @@ package ru.odbc.problems.p51to100.p62
 
 object Solution extends App {
 
-  def isPermutated(l: String, r: String): Boolean =
-    if (l.length != r.length) false
-    else l.sorted.zip(r.sorted).forall { case (lc, rc) => lc == rc }
+  def isPermutated(l: String, r: String): Boolean = l.sorted == r.sorted
 
   val cubesByLength = (BigInt(1) to BigInt(10000)).map(n => n * n * n).groupBy(_.toString.length)
 
@@ -17,5 +15,7 @@ object Solution extends App {
       s5 <- list if s5 > s4 && isPermutated(s5.toString, s4.toString)
     } yield List(s1, s2, s3, s4, s5)
 
-  println(cubesByLength.mapValues(l => findGroup(l.toList)).filter(_._2.nonEmpty))
+  val result = cubesByLength.mapValues(l => findGroup(l.toList)).filter(_._2.nonEmpty).values.map(_.map(_.min).min).min
+
+  println(result)
 }

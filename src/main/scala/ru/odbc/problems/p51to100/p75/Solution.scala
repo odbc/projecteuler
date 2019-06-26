@@ -20,8 +20,7 @@ object Solution extends App {
     p <- Stream.from(1).map(n => base.copy(base.a * n, base.b * n, base.c * n)).takeWhile(t => t.perimeter <= limit)
   } yield p
 
-  val result = mns.groupBy(_.perimeter).filter(_._2.size == 1)
+  val result = mns.groupBy(_.perimeter).count(_._2.size == 1)
 
-  println(result.size)
-
+  println(result)
 }

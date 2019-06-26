@@ -8,9 +8,10 @@ object Solution extends App {
     .filter { n =>
       val f = Math.floor(Math.sqrt(n)).toInt
       f * f != n
-    }.flatMap { n =>
+    }
+    .flatMap { n =>
       val f = Math.floor(Math.sqrt(n)).toInt
-      (1 to 100).foldLeft(f.toString) { case (acc, _) =>
+      (1 to digits).foldLeft(f.toString) { case (acc, _) =>
         val next = (0 to 9).takeWhile { d =>
           val estString = acc + d.toString
           val est = BigInt(estString)
@@ -19,7 +20,7 @@ object Solution extends App {
         acc + next.toString
       }.init
     }
+    .map(_.asDigit).sum
 
-  println(result.map(_.asDigit).sum)
-
+  println(result)
 }

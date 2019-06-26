@@ -11,7 +11,7 @@ object Solution extends App {
   def findIndicesOfChar(str: String, char: Char): List[Int] =
     str.zipWithIndex.foldRight(List.empty[Int]) { case ((c, i), acc) => if (c == char) i :: acc else acc }
 
-  val result = Primes.sequence
+  val (result, _) = Primes.sequence
     .map { p =>
       p -> List('0', '1', '2').map(c => c -> findIndicesOfChar(p.toString, c)).filter(_._2.size > 2).toMap
     }
@@ -27,7 +27,7 @@ object Solution extends App {
       }.values.flatten)
     }
     .find { case (_, l) => l.exists(set => set.forall(Primes(_).isPrime)) }
+    .get
 
-  println(result.get)
-
+  println(result)
 }

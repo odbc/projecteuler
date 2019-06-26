@@ -16,5 +16,4 @@ object Solution extends App {
   val result = (1 until 1000000).map(chain(_)).count(l => l.size == 60)
 
   println(result)
-
 }

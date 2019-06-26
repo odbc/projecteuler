@@ -41,8 +41,7 @@ object Solution extends App {
       val cycle = startOnμ.head :: startOnμ.tail.takeWhile(_ != startOnμ.head).toList
 
       (d, cycle.size)
-    }
+    }.count(_._2 % 2 == 1)
 
-  println(result.count(_._2 % 2 == 1))
-
+  println(result)
 }

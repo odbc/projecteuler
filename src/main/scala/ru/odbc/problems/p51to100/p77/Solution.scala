@@ -15,7 +15,7 @@ object Solution extends App {
       else nums.filter(c => c <= sum && c <= max).map(c => cache.getOrElseUpdate((sum - c, c), go(sum - c, c))).sum
 
     go(n, nums.max) <= 5000
-  }
+  }.head
 
-  println(result.head)
+  println(result)
 }

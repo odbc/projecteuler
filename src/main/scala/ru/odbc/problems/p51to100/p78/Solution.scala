@@ -23,10 +23,11 @@ object Solution extends App {
         .map { k =>
           val sign = if (k % 2 == 0) -1 else 1
           sign * (p(n - pentagonal(k)) + p (n - pentagonal(k) - k))
-        } sum
+        }.sum
     }
   })
 
-  println(Stream.from(1).dropWhile(p(_) % 1000000 != 0).head)
+  val result = Stream.from(1).dropWhile(p(_) % 1000000 != 0).head
 
+  println(result)
 }

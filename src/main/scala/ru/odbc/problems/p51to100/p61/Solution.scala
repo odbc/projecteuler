@@ -26,13 +26,13 @@ object Solution extends App {
        prevPrevType != nextNextType
   } yield (List(prevPrevType, prevType, 8, nextType, nextNextType), List(prevPrev, prev, o, next, nextNext))
 
-  val result = octaSets.filter { case (types, set) =>
+  val sets = octaSets.filter { case (types, set) =>
     val t = polygonalTypes.diff(types.toSet).head
     polygonals(t).contains((set.last.toString.drop(2) + set.head.toString.take(2)).toLong)
   }
 
-  val resultSet = result.head._2
+  val resultSet = sets.head._2
+  val result = ((resultSet.last.toString.drop(2) + resultSet.head.toString.take(2)).toInt :: resultSet).sum
 
-  println(((resultSet.last.toString.drop(2) + resultSet.head.toString.take(2)).toInt :: resultSet).sum)
-
+  println(result)
 }

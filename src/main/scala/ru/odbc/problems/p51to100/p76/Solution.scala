@@ -12,5 +12,7 @@ object Solution extends App {
     if (sum == 0) 1
     else nums.filter(c => c <= sum && c <= max).map(c => cache.getOrElseUpdate((sum - c, c), go(sum - c, c))).sum
 
-  println(go(100, 99))
+  val result = go(100, 99)
+
+  println(result)
 }

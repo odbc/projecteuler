@@ -9,5 +9,4 @@ object Solution extends App {
   val result = (2 to 1000000).map(n => phi(n)).sum
 
   println(result)
-
 }

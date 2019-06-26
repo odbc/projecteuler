@@ -178,10 +178,10 @@ object Solution extends App {
     def leftWins: Boolean = left |> right
   }
 
-  val game = Source.fromResource("p054_poker.txt").getLines
+  val result = Source.fromResource("p054_poker.txt").getLines
     .map(_.split(" ").map(Card(_)).splitAt(5))
     .map { case (l, r) => Round(Hand(l.toList), Hand(r.toList)) }
+    .count(_.leftWins)
 
-  println(game.count(_.leftWins))
-
+  println(result)
 }
