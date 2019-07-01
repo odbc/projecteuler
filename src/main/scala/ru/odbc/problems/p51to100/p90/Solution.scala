@@ -28,7 +28,7 @@ object Solution extends App {
     canDisplay81 = (left.contains(8) && right.contains(1)) || (right.contains(8) && left.contains(1))
     if canDisplay01 && canDisplay04 && canDisplay09 && canDisplay16 && canDisplay25 &&
        canDisplay36 && canDisplay49 && canDisplay64 && canDisplay81
-  } yield Set(left, right)).distinct
+  } yield Set(left, right)).distinct.size
 
-  println(result.size)
+  println(result)
 }

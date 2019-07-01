@@ -38,7 +38,7 @@ object Solution extends App {
       val perimeter = x + 2
       (sq4times, perimeter)
     }
-  }.filter(p => p._1 > 0 && p._1 % 4 == 0).toList
+  }.filter(p => p._1 > 0 && p._1 % 4 == 0).map(_._2).sum
 
-  println(result.map(_._2).sum)
+  println(result)
 }

@@ -1,10 +1,12 @@
 package ru.odbc.problems.p51to100.p83
 
+import lib.algorithms.graphs.{Edge, FordBellman, Graph}
+
 import scala.io.Source
 
 object Solution extends App {
 
-  final case class Edge(start: Int, end: Int, cost: Int)
+  def numByRowAndIndex(row: Int, index: Int): Int = row * limit + index
 
   val limit = 80
   val total = limit * limit
@@ -12,34 +14,31 @@ object Solution extends App {
   val rows = Source.fromResource("p083_matrix.txt").getLines
     .map(_.split(",").map(_.toInt).toVector).toVector
 
-  def numByRowAndIndex(row: Int, index: Int): Int = row * limit + index
+  val graph = rows.zipWithIndex.foldLeft(Graph()) { case (accRows, (row, rowIndex)) =>
+    row.zipWithIndex.foldLeft(accRows) { case (accEls, (_, elIndex)) =>
+      val withRightDown =
+        if (rowIndex == limit - 1 && elIndex == limit - 1) accEls
+        else {
+          val source = numByRowAndIndex(rowIndex, elIndex)
+          if (rowIndex == limit - 1)
+            accEls :+ Edge(source, numByRowAndIndex(rowIndex, elIndex + 1), rows(rowIndex)(elIndex + 1))
+          else if (elIndex == limit - 1)
+            accEls :+ Edge(source, numByRowAndIndex(rowIndex + 1, elIndex), rows(rowIndex + 1)(elIndex))
+          else accEls :+
+            Edge(source, numByRowAndIndex(rowIndex, elIndex + 1), rows(rowIndex)(elIndex + 1)) :+
+            Edge(source, numByRowAndIndex(rowIndex + 1, elIndex), rows(rowIndex + 1)(elIndex))
+        }
 
-  val graph = for {
-    (row, ri) <- rows.zipWithIndex
-    (_, i)    <- row.zipWithIndex
-    rightDown =
-      if (ri == limit - 1 && i == limit - 1) Vector()
-      else if (ri == limit - 1) Vector(Edge(numByRowAndIndex(ri, i), numByRowAndIndex(ri, i + 1), rows(ri)(i + 1)))
-      else if (i == limit - 1) Vector(Edge(numByRowAndIndex(ri, i), numByRowAndIndex(ri + 1, i), rows(ri + 1)(i)))
-      else Vector(
-        Edge(numByRowAndIndex(ri, i), numByRowAndIndex(ri, i + 1), rows(ri)(i + 1)),             // to right
-        Edge(numByRowAndIndex(ri, i), numByRowAndIndex(ri + 1, i), rows(ri + 1)(i)),             // to down
-      )
-    up   = if (ri == 0) Vector() else Vector(Edge(numByRowAndIndex(ri, i), numByRowAndIndex(ri - 1, i), rows(ri - 1)(i)))
-    left = if (i == 0)  Vector() else Vector(Edge(numByRowAndIndex(ri, i), numByRowAndIndex(ri, i - 1), rows(ri)(i - 1)))
-    edge      <- rightDown ++ up ++ left
-  } yield edge
+      val withUp =
+        if (rowIndex == 0) withRightDown
+        else withRightDown :+ Edge(numByRowAndIndex(rowIndex, elIndex), numByRowAndIndex(rowIndex - 1, elIndex), rows(rowIndex - 1)(elIndex))
 
-  /** Bellman–Ford algorithm
-    * http://e-maxx.ru/algo/ford_bellman
-    */
-  val paths = Array(0) ++ Array.fill(total - 1)(Int.MaxValue)
+      if (elIndex == 0) withUp
+      else withUp :+ Edge(numByRowAndIndex(rowIndex, elIndex), numByRowAndIndex(rowIndex, elIndex - 1), rows(rowIndex)(elIndex - 1))
+    }
+  }
 
-  for {
-    _ <- 0 until paths.length - 1
-    j <- graph.indices if paths(graph(j).start) < Int.MaxValue
-  } paths(graph(j).end) = List(paths(graph(j).end), paths(graph(j).start) + graph(j).cost).min
+  val result = FordBellman(graph).minFrom(0).last + rows(0)(0)
 
-  println(paths.last + rows(0)(0))
-
+  println(result)
 }

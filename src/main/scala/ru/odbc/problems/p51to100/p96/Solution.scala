@@ -132,7 +132,7 @@ object Solution extends App {
           }
         }
       }.find(_.isSolved).get
-  }
+  }.map(_.rows.head.cells.slice(0, 3).map(_.head).mkString.toInt).sum
 
-  println(result.map(_.rows.head.cells.slice(0, 3).map(_.head).mkString.toInt).sum)
+  println(result)
 }

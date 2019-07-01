@@ -17,5 +17,4 @@ object Solution extends App {
   } yield s + c + f).filter(_ < limit).distinct.size
 
   println(result)
-
 }

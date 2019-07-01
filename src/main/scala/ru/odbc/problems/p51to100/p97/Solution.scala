@@ -14,7 +14,7 @@ object Solution extends App {
   val power = 7830457
   val mod = BigInt(10).pow(lastCount).toLong
 
-  val result = 28433 * powMod(2, power, mod) + 1
+  val result = (28433 * powMod(2, power, mod) + 1)  % mod
 
-  println(result % mod)
+  println(result)
 }

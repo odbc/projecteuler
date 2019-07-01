@@ -28,8 +28,7 @@ object Solution extends App {
       digitSet,
       ints.sliding(2, 1).foldLeft(BigInt(0)) { case (m, pair) => if (m == 0 && pair.last - pair.head > 1) pair.head else m }
     )
-  }.maxBy(_._2)._1
+  }.maxBy(_._2)._1.sorted.mkString
 
-  println(result.sorted.mkString)
-
+  println(result)
 }

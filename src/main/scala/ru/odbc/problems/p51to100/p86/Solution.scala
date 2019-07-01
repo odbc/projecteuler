@@ -29,8 +29,7 @@ object Solution extends App {
     } yield count
 
     paths.sum <= 1000000
-  }
+  }.head
 
-  println(result.head)
-
+  println(result)
 }

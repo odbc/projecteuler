@@ -99,10 +99,9 @@ object Solution extends App {
 
   /**
     * Add equation - sum of all probabilities equals 1
+    * println(matrix.head.map(_ + 1).mkString(" ") + " 1")
+    * matrix.tail.foreach(row => println(row.mkString(" ")))
     */
-  println(matrix.head.map(_ + 1).mkString(" ") + " 1")
-
-  matrix.tail.foreach(row => println(row.mkString(" ")))
 
   /**
     * Solve system on

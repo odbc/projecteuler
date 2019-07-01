@@ -35,5 +35,7 @@ object Solution extends App {
       ks.exists(_._2 == 0)
     }.force
 
-  println(ks.values.toList.distinct.sum)
+  val result = ks.values.toList.distinct.sum
+
+  println(result)
 }
