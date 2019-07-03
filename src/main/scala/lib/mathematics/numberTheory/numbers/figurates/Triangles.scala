@@ -8,4 +8,3 @@ case class Triangles(n: BigInt) {
     if (n < 1) false
     else Naturals.isSquare(8 * n + 1)
 }
-
