@@ -54,7 +54,7 @@ object Solution extends App {
 
   val checkouts = firstShot ++ secondShot ++ thirdShot
 
-  val result = checkouts.filter(_.score < 100)
+  val result = checkouts.count(_.score < 100)
 
-  println(result.size)
+  println(result)
 }

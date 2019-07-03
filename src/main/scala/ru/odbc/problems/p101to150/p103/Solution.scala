@@ -47,22 +47,22 @@ object Solution extends App {
     .filter { case (l, r) => !((l.size < r.size && l.last < r.head) || (l.size > r.size && l.last > r.head)) }
 
   val result = Stream.from(1).map(n => (n, setsBySum(n)))
-    .dropWhile {case (n, sets) =>
+    .dropWhile {case (_, sets) =>
       sets.forall { set =>
-        combPairs.exists { case (linit, rinit) =>
-          val l = linit.map(set(_))
-          val r = rinit.map(set(_))
+        combPairs.exists { case (lInit, rInit) =>
+          val l = lInit.map(set(_))
+          val r = rInit.map(set(_))
           (l.size == r.size && l.sum == r.sum) || (l.size > r.size && l.sum <= r.sum) || (l.size < r.size && l.sum >= r.sum)
         }
       }
     }.head._2
     .find { set =>
-      combPairs.forall { case (linit, rinit) =>
-        val l = linit.map(set(_))
-        val r = rinit.map(set(_))
+      combPairs.forall { case (lInit, rInit) =>
+        val l = lInit.map(set(_))
+        val r = rInit.map(set(_))
         (l.size == r.size && l.sum != r.sum) || (l.size > r.size && l.sum > r.sum) || (l.size < r.size && l.sum < r.sum)
       }
-    }.get
+    }.get.mkString
 
-  println(result.mkString)
+  println(result)
 }

@@ -9,10 +9,7 @@ object Solution extends App {
 
   val result = ps.reverse.count { p =>
     val d = 12 * p - 3
-    Naturals.isSquare(d) && {
-      val sqd = Naturals.sqrt(d)
-      (sqd - 3) % 6 == 0
-    }
+    Naturals.isSquare(d) && (Naturals.sqrt(d) - 3) % 6 == 0
   }
 
   println(result)

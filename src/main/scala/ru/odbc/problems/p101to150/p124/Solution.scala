@@ -5,7 +5,7 @@ import lib.mathematics.numberTheory.arithmetic.Factors
 object Solution extends App {
 
   val limit = 100000
-  val result = (1 to limit).map(n => (n, Factors(n).canonical.keys.product)).sortBy(_._2)
+  val (result, _) = (1 to limit).map(n => (n, Factors(n).canonical.keys.product)).sortBy(_._2).drop(9999).head
 
-  println(result(9999)._1)
+  println(result)
 }

@@ -7,6 +7,7 @@ object Solution extends App {
   val result = Pell(5, -1).solutions.tail
     .filter { case (x, _) => (x - 2) % 5 == 0 || (x + 2) % 5 == 0 }
     .map(_._2)
+    .take(12).sum
 
-  println(result.take(12).sum)
+  println(result)
 }

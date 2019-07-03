@@ -6,7 +6,7 @@ import lib.mathematics.numberTheory.numbers.{Naturals, Primes}
 object Solution extends App {
 
   val limit = BigInt(10).pow(12)
-  val ds = (BigInt(2) #:: Naturals(4).sequence
+  val result = (BigInt(2) #:: Naturals(4).sequence
     .takeWhile(_ < Math.pow(limit.toDouble, 0.5).toInt).filterNot(Primes(_).isPrime))
     .flatMap { d =>
       val d2 = d * d
@@ -17,7 +17,7 @@ object Solution extends App {
           nn < limit && Naturals.isSquare(nn)
         }
       }).map(r => d3 / r + r)
-    }.distinct
+    }.distinct.sum
 
-  println(ds.sum)
+  println(result)
 }

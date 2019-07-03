@@ -7,6 +7,7 @@ object Solution extends App {
   val result = Pell(5, -4).solutions.tail.map(_._1)
     .filter(n => (n - 1) % 5 == 0)
     .map(n => (n - 1) / 5)
+    .drop(14).head
 
-  println(result.drop(14).head)
+  println(result)
 }

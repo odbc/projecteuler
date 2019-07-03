@@ -21,8 +21,6 @@ object Solution extends App {
       }
   }
 
-  println(isSpecial(sets(1)))
-
   val result = sets.filter(isSpecial).map(_.sum).sum
 
   println(result)

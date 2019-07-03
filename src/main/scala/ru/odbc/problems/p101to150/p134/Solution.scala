@@ -13,7 +13,7 @@ object Solution extends App {
 
   val limit = 1000000
   val psCount = Primes.sequence.takeWhile(_ <= limit).size
-  val ps = Primes.sequence.slice(2, psCount + 1).sliding(2, 1)
+  val result = Primes.sequence.slice(2, psCount + 1).sliding(2, 1)
     .map { case p1 #:: p2 #:: _ =>
       val nulls = BigInt(10).pow(p1.toString.length)
       val convs = convNums(Ratio(p2, nulls).contFraction)
@@ -25,7 +25,7 @@ object Solution extends App {
         }
 
       rem * nulls + p1
-    }
+    }.sum
 
-  println(ps.sum)
+  println(result)
 }

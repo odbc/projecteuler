@@ -21,12 +21,12 @@ object Solution extends App {
       (step + 1, nextMap, nextVs)
     }
 
-  val result = initMap ++ initVs.foldLeft(initMap.filter(_._2 == 0)) { case (map, v) =>
+  val result = (initMap ++ initVs.foldLeft(initMap.filter(_._2 == 0)) { case (map, v) =>
     (1 +: 2 +: v).foldLeft(map) { case (m, e) =>
       val n = v.last + e
       if (m.contains(n) && m(n) == 0) m.updated(n, initStep) else m
     }
-  }
+  }).values.sum + 1
 
-  println(result.values.sum + 1)
+  println(result)
 }

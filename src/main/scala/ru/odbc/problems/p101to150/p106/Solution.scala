@@ -15,11 +15,9 @@ object Solution extends App {
   } yield Set(initComb.toSet, restComb.toSet)).distinct.map(_.map(_.toVector).toVector).map(v => (v(0).sorted, v(1).sorted))
 
   val result = combPairs
-    .filter { case (lset, rset) => lset.size == rset.size && lset.size > 1 }
-    .filter { case (lset, rset) => lset.last > rset.head }
-    .filter { case (lset, rset) =>
-      lset.zip(rset).exists { case (l, r) => l > r }
-    }
+    .filter { case (lSet, rSet) => lSet.size == rSet.size && lSet.size > 1 }
+    .filter { case (lSet, rSet) => lSet.last > rSet.head }
+    .count  { case (lSet, rSet) => lSet.zip(rSet).exists { case (l, r) => l > r } }
 
-  println(result.size)
+  println(result)
 }

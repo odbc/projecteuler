@@ -16,5 +16,4 @@ object Solution extends App {
   val result  = ways(rowSize)
 
   println(result)
-
 }

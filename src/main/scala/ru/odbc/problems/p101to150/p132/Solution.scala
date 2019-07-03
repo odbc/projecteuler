@@ -38,7 +38,8 @@ object Solution extends App {
   val factors3 = Primes.sequence.flatMap { p =>
     remSum(p, 100000, 9999)
   }
-  val result = cycleMin(base, factors1, factors2, factors3)
 
-  println(result.take(40).sum)
+  val result = cycleMin(base, factors1, factors2, factors3).take(40).sum
+
+  println(result)
 }

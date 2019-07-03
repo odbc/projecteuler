@@ -13,7 +13,7 @@ object Solution extends App {
       }
       val A = remsFrom(1, 1, 1).find(_._3 == 0).get._1
       (n - 1) % A == 0
-    }
+    }.take(count).sum
 
-  println(result.take(count).sum)
+  println(result)
 }

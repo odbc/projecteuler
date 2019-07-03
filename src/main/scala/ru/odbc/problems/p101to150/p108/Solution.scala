@@ -12,7 +12,7 @@ object Solution extends App {
 
   val result = Stream.from(1).dropWhile { n =>
     Factors(n).canonical.mapValues(2 * _ + 1).values.product / 2 + 1 <= limit
-  }
+  }.head
 
-  println(result.head)
+  println(result)
 }

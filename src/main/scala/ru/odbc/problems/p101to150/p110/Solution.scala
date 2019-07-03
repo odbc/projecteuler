@@ -8,12 +8,12 @@ object Solution extends App {
   val prodLimit = 2 * (limit - 1)
   val prodSize = Math.floor(Math.log(prodLimit) / Math.log(3)).toInt
 
-  val result = (prodSize to 2 by -1).foldLeft((true, BigInt(10).pow(100))) { case ((contFlag, res), size) =>
+  val (_, result) = (prodSize to 2 by -1).foldLeft((true, BigInt(10).pow(100))) { case ((contFlag, res), size) =>
     if (contFlag) {
       val init = Vector.fill(size)(3)
       val initProd = Vector.fill(size)(3).product
 
-      val minValue = (0 until size).foldLeft((Vector(init), BigInt(10).pow(100))) { case ((acc, min), pos) =>
+      val (_, minValue) = (0 until size).foldLeft((Vector(init), BigInt(10).pow(100))) { case ((acc, min), pos) =>
         val nextAcc =
           if (pos == 0) (5 to 3 * prodLimit / initProd + 2 by 2).map(_ +: Vector.fill(size - 1)(3)).toVector
           else acc.flatMap { v =>
@@ -30,11 +30,11 @@ object Solution extends App {
             .min
 
         (nextAcc.filter(_.product <= prodLimit), Vector(nextMin, min).min)
-      }._2
+      }
 
       if (minValue >= res) (false, res) else (true, minValue)
     } else (contFlag, res)
-  }._2
+  }
 
   println(result)
 }
