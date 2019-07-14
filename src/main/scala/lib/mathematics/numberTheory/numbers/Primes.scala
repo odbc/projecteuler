@@ -2,11 +2,28 @@ package lib.mathematics.numberTheory.numbers
 
 import scala.collection.mutable
 
+import lib.aux.whileLoop
+
 case class Primes(p: BigInt) {
 
-  def isPrime: Boolean =
+  def isPrime: Boolean = {
     if (p < 2) false
+    else if (p < BigInt(10).pow(24)) List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41).forall(!witness(_, p))
     else Primes.sequence.takeWhile(j => j * j <= p).forall(p % _ > 0)
+  }
+
+  private def witness(a: BigInt, n: BigInt): Boolean = {
+    val (t, u) = whileLoop((0, n - 1))(_._2 % 2 == 0) { case (tt, nn) => (tt + 1, nn / 2) }
+    val x = a.modPow(u, n)
+    val (res, xt) = (1 to t).foldLeft((false, x)) { case ((flag, curX), _) =>
+      if (flag) (flag, 1)
+      else {
+        val next = (curX * curX) % n
+        (next == 1 && curX != 1 && curX != n - 1, next)
+      }
+    }
+    res || xt != 1
+  }
 }
 
 object Primes {
