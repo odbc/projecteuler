@@ -1,6 +1,7 @@
 package ru.odbc.problems.p51to100.p93
 
 import lib.mathematics.numberTheory.numbers.Ratio
+import lib.mathematics.numberTheory.numbers.Ratio._
 
 object Solution extends App {
 

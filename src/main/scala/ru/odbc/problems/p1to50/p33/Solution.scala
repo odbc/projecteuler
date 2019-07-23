@@ -10,10 +10,10 @@ object Solution extends App {
     denom <- (num + 1) to BigInt(99)
     denomStr = denom.toString
     fraction = Ratio(num, denom)
-    if (numStr(0) == denomStr(0) && Ratio(numStr(1).asDigit, denomStr(1).asDigit) == fraction) ||
-       (numStr(0) == denomStr(1) && Ratio(numStr(1).asDigit, denomStr(0).asDigit) == fraction) ||
-       (numStr(1) == denomStr(0) && Ratio(numStr(0).asDigit, denomStr(1).asDigit) == fraction) ||
-       (numStr(1) == denomStr(1) && numStr(1) != '0' && Ratio(numStr(0).asDigit, denomStr(0).asDigit) == fraction)
+    if (numStr(0) == denomStr(0) && Ratio(numStr(1).asDigit, denomStr(1).asDigit) === fraction) ||
+       (numStr(0) == denomStr(1) && Ratio(numStr(1).asDigit, denomStr(0).asDigit) === fraction) ||
+       (numStr(1) == denomStr(0) && Ratio(numStr(0).asDigit, denomStr(1).asDigit) === fraction) ||
+       (numStr(1) == denomStr(1) && numStr(1) != '0' && Ratio(numStr(0).asDigit, denomStr(0).asDigit) === fraction)
   } yield fraction
 
   val result = fractions.product.den

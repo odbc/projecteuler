@@ -35,7 +35,7 @@ object Solution extends App {
     .map { eq =>
       (1 to 11).map(n => eq(Ratio(n, 1)))
         .zip(points.map(_._2))
-        .dropWhile { case (l, r) => l == r }
+        .dropWhile { case (l, r) => l === r }
         .head._1
     }.sum
 

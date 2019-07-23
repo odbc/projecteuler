@@ -7,7 +7,10 @@ import lib.aux.whileLoop
 case class Primes(p: BigInt) {
 
   def isPrime: Boolean = {
+    val init = List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41)
+
     if (p < 2) false
+    else if (init.contains(p)) true
     else if (p < BigInt(10).pow(24)) List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41).forall(!witness(_, p))
     else Primes.sequence.takeWhile(j => j * j <= p).forall(p % _ > 0)
   }
